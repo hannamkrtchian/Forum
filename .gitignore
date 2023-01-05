@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # db configuration
-server/dbConfig.js
+dbConfig.js
