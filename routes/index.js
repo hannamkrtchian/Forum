@@ -9,7 +9,7 @@ async function findAllPosts(client) {
   const results = await cursor.toArray();
 
   if (results.length > 0) {
-      return results;
+      return results.reverse();
   } else {
       return "No posts yet.";
   }
