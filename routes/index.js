@@ -11,7 +11,7 @@ async function findAllPosts(client) {
   if (results.length > 0) {
       return results.reverse();
   } else {
-      return "No posts yet.";
+      return "";
   }
 }
 

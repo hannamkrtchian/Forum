@@ -8,15 +8,19 @@
           <h3 class="card-title">Welcome to this forum !</h3>
           <p class="card-text">Check out all posts here:</p>
 
-          <%# show every post %>
-          <% posts.forEach(function(post) { %>
-            <hr>
-            <p><%= post.message %></p>
-            <p><small>Author: <%= post.author %></small></p>
-            <p><small>Date: <%= post.date %></small></p>
-            <a href="#" class="btn btn-primary">Edit this post</a>
-          <% }); %>
-          
+          <%# check if there are posts %>
+          <% if(posts != null) { %>
+            <%# show every post %>
+            <% posts.forEach(function(post) { %>
+              <hr>
+              <h3><%= post.title %></h3>
+              <p><%= post.message %></p>
+              <p><small>Author: <%= post.author %></small></p>
+              <a href="/posts/show/<%=post._id%>" class="btn btn-primary">Details of this post</a>
+            <% }); %>
+          <% } else { %>
+            <p>There are no posts yet.</p>
+          <% } %>
         </div>
       </div>
     </div>

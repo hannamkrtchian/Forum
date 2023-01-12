@@ -1,0 +1,27 @@
+<%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+      <div class="card">
+
+        <%# check if the post is found %>
+        <% if(post != null) { %>
+          <h1 class="card-header"><%= title %> '<%= post.title %>'</h1>
+          <div class="card-body">
+              <h3><%= post.title %></h3>
+              <p><%= post.message %></p>
+              <p><small>Author: <%= post.author %></small></p>
+              <p><small>Date: <%= post.date %></small></p>
+              <a href="/posts/edit/<%=post._id%>" class="btn btn-primary">Edit this post</a>
+              <a href="/posts/delete/<%=post._id%>" class="btn btn-danger">Delete this post</a>
+          </div>
+          <% } else { %>
+            <h1 class="card-header">Not found</h1>
+            <div class="card-body">
+              <h5>The post you are looking for does not exist.</h5>
+            </div>
+          <% } %>
+      </div>
+    </div>
+  </body>
+<%- include('../partials/footer') %>

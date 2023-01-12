@@ -1,0 +1,39 @@
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/header') %>
+    <div class="container">
+        <div class="card">
+
+            <%# check if the post is found %>
+            <% if(post != null) { %>
+            <h1 class="card-header"><%= title %> '<%= post.title %>'</h1>
+            <div class="card-body">
+                <%# form %>
+                <form method="PUT" action="/posts/update/<%=post._id%>">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name: </label>
+                        <input type="text" class="form-control" id="name" placeholder="<%=post.author%>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title: </label>
+                        <input type="text" class="form-control" id="title" placeholder="<%=post.title%>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message: </label>
+                        <textarea class="form-control" id="message" rows="3" placeholder="<%=post.message%>"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <input type="submit" class="btn btn-primary" value="Edit" />
+                    </div>
+                </form>
+            </div>
+            <% } else { %>
+                <h1 class="card-header">Not found</h1>
+                <div class="card-body">
+                <h5>The post you want to edit does not exist.</h5>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+<%- include('../partials/footer') %>
