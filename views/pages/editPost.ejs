@@ -9,7 +9,7 @@
             <h1 class="card-header"><%= title %> '<%= post.title %>'</h1>
             <div class="card-body">
                 <%# form %>
-                <form method="PUT" action="/posts/update/<%=post._id%>">
+                <form method="GET" action="/posts/update/<%=post._id%>">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name: </label>
                         <input type="text" class="form-control" id="name" placeholder="<%=post.author%>">

@@ -11,6 +11,7 @@ var editPostRouter = require('./routes/posts/editPost');
 var deletePostRouter = require('./routes/posts/deletePost');
 var updatePostRouter = require('./routes/posts/updatePost');
 var createPostRouter = require('./routes/posts/createPost');
+var createPostFormRouter = require('./routes/posts/createPostForm');
 
 var app = express();
 
@@ -31,6 +32,7 @@ app.use('/posts/edit', editPostRouter);
 app.use('/posts/delete', deletePostRouter);
 app.use('/posts/update', updatePostRouter);
 app.use('/posts/create', createPostRouter);
+app.use('/posts/createpage', createPostFormRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

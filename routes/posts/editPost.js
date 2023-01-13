@@ -27,7 +27,7 @@ router.get('/:postId', async function(req, res, next) {
         let post = await findPost(client, req.params.postId);
     
         // send post to view
-        res.render('edit', { title: 'Edit post', post: post });
+        res.render('editPost', { title: 'Edit post', post: post });
     
       } catch (e) {
           console.error(e);
