@@ -12,7 +12,7 @@ const ajv = new Ajv();
 // schema
 const schema = {
   properties: {
-    title: {type: "string"},
+    postId: {type: "string"},
     author: {type: "string"},
     message: {type: "string"},
     date: {type: "string"}
@@ -48,10 +48,10 @@ let seconds = date_ob.getSeconds();
 // stores date & time in DD/MM/YYYY HH:MM:SS format
 let currentDate = `${date}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 
-// create post in db
-async function createPost(client, title, author, message) {
+// create comment in db
+async function createComment(client, author, message, postId) {
   const data = {
-    title: title,
+    postId: postId,
     author: author,
     message: message,
     date: currentDate
@@ -62,8 +62,7 @@ async function createPost(client, title, author, message) {
   if (!valid) {
     console.log(validate.errors);
   } else {
-    const result = await client.db("forum").collection("posts").insertOne(data);
-    return(result.insertedId);
+    await client.db("forum").collection("comments").insertOne(data);
   }
 }
 
@@ -80,34 +79,34 @@ async function findPost(client, postId) {
 
 // find comments of post
 async function findComments(client, postId) {
-  const cursor = client.db("forum").collection("comments").find( { postId: postId } );
+    const cursor = client.db("forum").collection("comments").find( { postId: postId } );
 
-  const results = await cursor.toArray();
+    const results = await cursor.toArray();
 
-  if (results.length > 0) {
-      return results;
-  } else {
-      return null;
-  }
+    if (results.length > 0) {
+        return results;
+    } else {
+        return null;
+    }
 }
 
-/* Create post */
-router.get('/:title/:author/:message', async function(req, res, next) {
+/* Create comment */
+router.get('/:postId/:author/:message', async function(req, res, next) {
     try {
       // connect & check
       await client.connect();
-      console.log("Connected to MongoDB on /createPost");
+      console.log("Connected to MongoDB on /createComment");
   
-      // create post
-      const postId = await createPost(client, req.params.title, req.params.author, req.params.message);
+      // create comment
+      await createComment(client, req.params.author, req.params.message, req.params.postId);
 
-      // get created post
-      let post = await findPost(client, postId);
+      // get post
+      let post = await findPost(client, req.params.postId);
 
       // get comments
       let comments = await findComments(client, req.params.postId);
   
-      // send view of created post
+      // send view of post with comments
       res.render('details', { title: 'Details of post', post: post, comments: comments });
   
     } catch (e) {

@@ -11,21 +11,19 @@ const ajv = new Ajv();
 
 // schema
 const schema = {
-  properties: {
-    title: {type: "string"},
-    author: {type: "string"},
-    message: {type: "string"}
-  },
-  optionalProperties: {
+    properties: {
+      author: {type: "string"},
+      message: {type: "string"},
+    },
+    optionalProperties: {
+    }
   }
-}
 
 const validate = ajv.compile(schema);
 
-// update post in db
-async function updatePost(client, postId, title, author, message) {
+// update comment in db
+async function updateComment(client, commentId, author, message) {
   const data = {
-    title: title,
     author: author,
     message: message
   }
@@ -35,8 +33,8 @@ async function updatePost(client, postId, title, author, message) {
   if (!valid) {
     console.log(validate.errors);
   } else {
-    await client.db("forum").collection("posts").updateOne({ '_id': ObjectId(postId) },
-    { $set: {title: data.title, author: data.author, message: data.message}});
+    await client.db("forum").collection("comments").updateOne({ '_id': ObjectId(commentId) },
+    { $set: {author: data.author, message: data.message}});
   }
 }
 
@@ -53,34 +51,34 @@ async function findPost(client, postId) {
 
 // find comments of post
 async function findComments(client, postId) {
-  const cursor = client.db("forum").collection("comments").find( { postId: postId } );
+    const cursor = client.db("forum").collection("comments").find( { postId: postId } );
 
-  const results = await cursor.toArray();
+    const results = await cursor.toArray();
 
-  if (results.length > 0) {
-      return results;
-  } else {
-      return null;
-  }
+    if (results.length > 0) {
+        return results;
+    } else {
+        return null;
+    }
 }
 
-/* Update post */
-router.get('/:postId/:title/:author/:message', async function(req, res, next) {
+/* Update comment */
+router.get('/:postId/:commentId/:author/:message', async function(req, res, next) {
     try {
       // connect & check
       await client.connect();
-      console.log("Connected to MongoDB on /updatePost");
+      console.log("Connected to MongoDB on /updateComment");
   
-      // update post
-      await updatePost(client, req.params.postId, req.params.title, req.params.author, req.params.message);
+      // update comment
+      await updateComment(client, req.params.commentId, req.params.author, req.params.message);
   
-      // find updated post
+      // find post
       let post = await findPost(client, req.params.postId);
 
       // get comments
       let comments = await findComments(client, req.params.postId);
 
-      // send updated message back
+      // send view with updated comment
       res.render('details', { title: 'Details of post', post: post, comments: comments });
   
     } catch (e) {

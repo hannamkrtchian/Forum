@@ -16,6 +16,19 @@ async function findPost(client, postId) {
   }
 }
 
+// find comments of post
+async function findComments(client, postId) {
+  const cursor = client.db("forum").collection("comments").find( { postId: postId } );
+
+  const results = await cursor.toArray();
+
+  if (results.length > 0) {
+      return results;
+  } else {
+      return null;
+  }
+}
+
 /* Send post to view */
 router.get('/:postId', async function(req, res, next) {
   try {
@@ -26,8 +39,11 @@ router.get('/:postId', async function(req, res, next) {
     // get requested post
     let post = await findPost(client, req.params.postId);
 
+    // get comments of the post
+    let comments = await findComments(client, req.params.postId);
+
     // send post to view
-    res.render('details', { title: 'Details of post', post: post });
+    res.render('details', { title: 'Details of post', post: post, comments: comments });
 
   } catch (e) {
       console.error(e);

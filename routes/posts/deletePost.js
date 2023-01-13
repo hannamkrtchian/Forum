@@ -19,7 +19,7 @@ router.get('/:postId', async function(req, res, next) {
         // delete post
         await deletePost(client, req.params.postId);
 
-        // send updated message back
+        // send deleted  message back
         res.send("post deleted");
 
     } catch (e) {

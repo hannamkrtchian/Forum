@@ -15,12 +15,46 @@
               <a href="/posts/edit/<%=post._id%>" class="btn btn-primary">Edit this post</a>
               <a href="/posts/delete/<%=post._id%>" class="btn btn-danger">Delete this post</a>
           </div>
-          <% } else { %>
-            <h1 class="card-header">Not found</h1>
-            <div class="card-body">
-              <h5>The post you are looking for does not exist.</h5>
-            </div>
-          <% } %>
+          
+          <div class="card-body">
+          <%# check if there are comments %>
+          <% if(comments != null) { %>
+            
+            <hr>
+            <h3>Comments: </h3><br>
+            <% comments.forEach(function(comment) { %>
+              <h6>'<%= comment.author %>' wrote: </h6>
+              <p><%= comment.message %></p>
+              <p><small>Date: <%= comment.date %></small></p>
+              <a href="/comments/update/<%=comment._id%>" class="btn btn-primary">Edit this comment</a>
+              <a href="/comments/delete/<%=comment._id%>" class="btn btn-danger">Delete this comment</a>
+              <hr><br>
+            <% }); %>
+          <% } else {} %>
+
+            <h3>Add a comment: </h3>
+            <%# form %>
+            <form method="GET" action="/comments/create">
+              <div class="mb-3">
+                  <label for="name" class="form-label">Name: </label>
+                  <input type="text" class="form-control" id="name">
+              </div>
+              <div class="mb-3">
+                  <label for="message" class="form-label">Message: </label>
+                  <textarea class="form-control" id="message" rows="3"></textarea>
+              </div>
+              <div class="d-flex justify-content-center">
+                  <input type="submit" class="btn btn-primary" value="Add comment" />
+              </div>
+            </form>
+            
+            <% } else { %>
+              <h1 class="card-header">Not found</h1>
+              <div class="card-body">
+                <h5>The post you are looking for does not exist.</h5>
+              </div>
+            <% } %>
+        </div>
       </div>
     </div>
   </body>
