@@ -3,31 +3,55 @@ var router = express.Router();
 const client = require('../../database/connection');
 
 // id's in mongoDB
-var ObjectId = require('mongodb').ObjectId
+var ObjectId = require('mongodb').ObjectId;
 
-// find post in db
-async function findPost(client, postId) {
-    const result = await client.db("forum").collection("posts").findOne({_id: ObjectId(postId)});
-  
-    if (result) {
-      return(result);
-    } else {
-      return null;
-    }
+// JSON Type Definition
+const Ajv = require("ajv/dist/jtd");
+const ajv = new Ajv();
+
+// schema
+const schema = {
+  properties: {
+    title: {type: "string"},
+    author: {type: "string"},
+    message: {type: "string"}
+  },
+  optionalProperties: {
+  }
+}
+
+const validate = ajv.compile(schema);
+
+// update post in db
+async function updatePost(client, postId, title, author, message) {
+  const data = {
+    title: title,
+    author: author,
+    message: message
   }
 
-/* Edit post page */
-router.get('/:postId', async function(req, res, next) {
+  const valid = validate(data);
+
+  if (!valid) {
+    console.log(validate.errors);
+  } else {
+    await client.db("forum").collection("posts").updateOne({ '_id': ObjectId(postId) },
+    { $set: {title: data.title, author: data.author, message: data.message}});
+  }
+}
+
+/* Update post */
+router.get('/:postId/:title/:author/:message', async function(req, res, next) {
     try {
         // connect & check
         await client.connect();
-        console.log("Connected to MongoDB on /editPost");
+        console.log("Connected to MongoDB on /updatePost");
     
-        // get requested post
-        let post = await findPost(client, req.params.postId);
+        // update post
+        await updatePost(client, req.params.postId, req.params.title, req.params.author, req.params.message);
     
-        // send post to view
-        res.render('edit', { title: 'Edit post', post: post });
+        // send updated message back
+        res.send("updated");
     
       } catch (e) {
           console.error(e);
