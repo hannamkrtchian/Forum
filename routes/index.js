@@ -4,12 +4,12 @@ const client = require('../database/connection');
 
 // find all posts function
 async function findAllPosts(client) {
-  const cursor = client.db("forum").collection("posts").find();
+  const cursor = client.db("forum").collection("posts").find().sort({date: -1}).limit(5);
 
   const results = await cursor.toArray();
 
   if (results.length > 0) {
-      return results.reverse();
+      return results;
   } else {
       return "";
   }

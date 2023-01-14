@@ -6,11 +6,11 @@
         <h1 class="card-header"><%= title %></h1>
         <div class="card-body">
           <h3 class="card-title">Welcome to this forum !</h3>
-          <p class="card-text">Check out all posts here:</p>
+          <p class="card-text">Check out the last 5 posts here:</p>
 
           <%# check if there are posts %>
           <% if(posts != null) { %>
-            <%# show every post %>
+            <%# show every post returned from the route %>
             <% posts.forEach(function(post) { %>
               <hr>
               <h3><%= post.title %></h3>
